@@ -1,7 +1,7 @@
 // server.js
 require('dotenv').config();
 
-console.log("MONGO_URL =", process.env.MONGO_URL);
+console.log("MONGO_URL chargé :", !!process.env.MONGO_URL);
 
 const path = require('path');
 const express = require('express');
