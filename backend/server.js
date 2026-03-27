@@ -14,6 +14,7 @@ const hpp = require('hpp');
 const mongoose = require('mongoose');
 
 const app = express();
+app.use(cors());
 
 /* ------------------------ Connexion Mongo ------------------------ */
 mongoose
