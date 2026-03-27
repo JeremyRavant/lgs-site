@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Home.scss';
 import { Link } from "react-router-dom";
-import Categorie from "../../components/categorieCard";
+import Categorie from "../../components/CategorieCard";
 import axios from 'axios';
 import GoogleReviews from '../../components/GoogleReviews';
 import { apiUrl } from "../utils/api";
