@@ -8,9 +8,9 @@ npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
 
-# Build / uploads
+# Build
 dist/
-uploads/
+
 
 # Env files
 .env

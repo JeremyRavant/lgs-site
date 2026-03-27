@@ -5,7 +5,7 @@ import { apiUrl } from '../utils/api';
 import './Login.scss';
 
 export default function Login() {
-  const [login, setLogin] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [err, setErr] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,14 +20,13 @@ export default function Login() {
       const r = await fetch(apiUrl('/api/admin/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ login, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await r.json().catch(() => ({}));
 
       if (!r.ok) {
         setErr(data.message || 'Identifiants incorrects');
-        setLoading(false);
         return;
       }
 
@@ -44,10 +43,11 @@ export default function Login() {
     <div className="login-page">
       <h2>Connexion admin</h2>
       <form onSubmit={handleSubmit} className="login-form">
-        <label>Identifiant</label>
+        <label>Email</label>
         <input
-          value={login}
-          onChange={(e) => setLogin(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="email"
           autoComplete="username"
         />
 

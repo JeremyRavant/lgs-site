@@ -1,29 +1,71 @@
-// routes/galleries.js
 const express = require('express');
 const router = express.Router();
 
-const path = require('path');
-const fs = require('fs');
 const crypto = require('crypto');
+const streamifier = require('streamifier');
 
 const multer = require('multer');
 const sharp = require('sharp');
 
 const Gallery = require('../models/Gallery');
-const auth = require('../middleware/auth'); // protège POST/PUT/DELETE
+const auth = require('../middleware/auth');
+const cloudinary = require('../config/cloudinary');
 
 /* ------------------------------------------------------------------ */
-/*  Dossier d’upload                                                   */
+/*  Helpers Cloudinary                                                */
 /* ------------------------------------------------------------------ */
-const UPLOAD_DIR = path.join(__dirname, '..', 'uploads');
-if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+function extractPublicIdFromUrl(url) {
+  if (!url || typeof url !== 'string' || !url.includes('res.cloudinary.com')) {
+    return null;
+  }
 
-function deleteImageFromUploads(imagePath) {
-  if (!imagePath || !imagePath.startsWith('/uploads/')) return;
-  const filename = imagePath.replace('/uploads/', '');
-  const fullPath = path.join(UPLOAD_DIR, filename);
-  fs.access(fullPath, fs.constants.F_OK, (err) => {
-    if (!err) fs.unlink(fullPath, () => {});
+  try {
+    const parts = url.split('/upload/');
+    if (parts.length < 2) return null;
+
+    let pathPart = parts[1];
+
+    // retire éventuelle version v123456/
+    pathPart = pathPart.replace(/^v\d+\//, '');
+
+    // retire extension
+    const withoutExtension = pathPart.replace(/\.[^/.]+$/, '');
+
+    return withoutExtension;
+  } catch {
+    return null;
+  }
+}
+
+async function deleteImageFromCloudinary(imageUrl) {
+  const publicId = extractPublicIdFromUrl(imageUrl);
+  if (!publicId) return;
+
+  try {
+    await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
+  } catch (err) {
+    console.error('Erreur suppression Cloudinary:', err.message);
+  }
+}
+
+function uploadBufferToCloudinary(buffer, folder = 'lgs-metallerie') {
+  return new Promise((resolve, reject) => {
+    const publicId = `${Date.now()}-${crypto.randomBytes(8).toString('hex')}`;
+
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder,
+        public_id: publicId,
+        resource_type: 'image',
+        format: 'webp',
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result.secure_url);
+      }
+    );
+
+    streamifier.createReadStream(buffer).pipe(uploadStream);
   });
 }
 
@@ -32,58 +74,62 @@ function deleteImageFromUploads(imagePath) {
 /* ------------------------------------------------------------------ */
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 Mo
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    // on accepte seulement image/*
     if ((file.mimetype || '').startsWith('image/')) return cb(null, true);
     return cb(new Error('INVALID_FILE_TYPE'));
   },
 });
 
 /* ------------------------------------------------------------------ */
-/*  Traitement & enregistrement (→ .webp optimisée)                    */
+/*  Traitement & upload Cloudinary                                    */
 /* ------------------------------------------------------------------ */
-async function processAndSaveImage(buffer) {
-  // vérifie que le buffer est bien une image décodable
+async function processAndUploadImage(buffer) {
   await sharp(buffer).metadata();
 
-  const filename = `${Date.now()}-${crypto.randomBytes(8).toString('hex')}.webp`;
-  const outputPath = path.join(UPLOAD_DIR, filename);
-
-  await sharp(buffer)
+  const processedBuffer = await sharp(buffer)
     .rotate()
     .resize({ width: 1200, height: 1200, fit: 'inside', withoutEnlargement: true })
     .webp({ quality: 80 })
-    .toFile(outputPath);
+    .toBuffer();
 
-  return `/uploads/${filename}`;
+  const imageUrl = await uploadBufferToCloudinary(processedBuffer);
+  return imageUrl;
 }
 
 /* ------------------------------------------------------------------ */
 /*  Helpers de validation                                              */
 /* ------------------------------------------------------------------ */
 function normalizePicturesField(pictures) {
-  // Accepte tableau direct OU chaîne JSON
   if (!pictures) return [];
   let arr = pictures;
 
   if (typeof arr === 'string') {
-    try { arr = JSON.parse(arr); }
-    catch { throw new Error('PICTURES_JSON_INVALID'); }
+    try {
+      arr = JSON.parse(arr);
+    } catch {
+      throw new Error('PICTURES_JSON_INVALID');
+    }
   }
+
   if (!Array.isArray(arr)) throw new Error('PICTURES_NOT_ARRAY');
 
   if (
     arr.length > 50 ||
-    !arr.every((p) => typeof p === 'string' && p.startsWith('/uploads/'))
+    !arr.every(
+      (p) =>
+        typeof p === 'string' &&
+        (p.startsWith('http://') || p.startsWith('https://'))
+    )
   ) {
     throw new Error('PICTURES_FORMAT_INVALID');
   }
+
   return arr;
 }
 
 /* ------------------------------------------------------------------ */
-/*  GET toutes les galeries (public)                                   */
+/*  GET toutes les galeries (public)                                  */
 /* ------------------------------------------------------------------ */
 router.get('/', async (_req, res) => {
   try {
@@ -95,7 +141,7 @@ router.get('/', async (_req, res) => {
 });
 
 /* ------------------------------------------------------------------ */
-/*  POST /upload (protégé) — champ file = "image"                      */
+/*  POST /upload (protégé) — champ file = "image"                     */
 /* ------------------------------------------------------------------ */
 router.post('/upload', auth, (req, res, next) => {
   upload.single('image')(req, res, async (err) => {
@@ -114,22 +160,23 @@ router.post('/upload', auth, (req, res, next) => {
     }
 
     try {
-      const imageUrl = await processAndSaveImage(req.file.buffer);
+      const imageUrl = await processAndUploadImage(req.file.buffer);
       return res.json({ imageUrl });
-    } catch {
+    } catch (e) {
+      console.error(e);
       return res.status(400).json({ message: 'Fichier invalide' });
     }
   });
 });
 
 /* ------------------------------------------------------------------ */
-/*  POST / (protégé) — créer une galerie                               */
+/*  POST / (protégé) — créer une galerie                              */
 /* ------------------------------------------------------------------ */
 router.post('/', auth, upload.none(), async (req, res) => {
   try {
     const { cover, description, category } = req.body;
 
-    if (!cover || typeof cover !== 'string' || !cover.startsWith('/uploads/')) {
+    if (!cover || typeof cover !== 'string' || !cover.startsWith('http')) {
       return res.status(400).json({ message: 'Une image de couverture valide est requise' });
     }
 
@@ -156,21 +203,21 @@ router.post('/', auth, upload.none(), async (req, res) => {
     const saved = await newGallery.save();
     res.status(201).json({ message: 'Galerie créée avec succès', gallery: saved });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Erreur création galerie' });
   }
 });
 
 /* ------------------------------------------------------------------ */
-/*  PUT /:id (protégé) — peut recevoir "cover" (file)                  */
+/*  PUT /:id (protégé)                                                */
 /* ------------------------------------------------------------------ */
-router.put('/:id', auth, upload.single('cover'), async (req, res) => {
+router.put('/:id', auth, upload.none(), async (req, res) => {
   try {
-    const { description, category } = req.body;
+    const { description, category, cover } = req.body;
 
     const existing = await Gallery.findById(req.params.id);
     if (!existing) return res.status(404).json({ message: 'Galerie non trouvée' });
 
-    // Pictures : si fourni → normalise + supprime les anciennes retirées
     let newPictures = existing.pictures;
     if (typeof req.body.pictures !== 'undefined') {
       let normalized = [];
@@ -186,22 +233,20 @@ router.put('/:id', auth, upload.single('cover'), async (req, res) => {
         return res.status(400).json({ message: 'Format de pictures invalide' });
       }
 
-      // Supprimer physiquement les images retirées
       const removedPictures = existing.pictures.filter((old) => !normalized.includes(old));
-      removedPictures.forEach(deleteImageFromUploads);
+      for (const img of removedPictures) {
+        await deleteImageFromCloudinary(img);
+      }
 
       newPictures = normalized;
     }
 
-    // Nouvelle cover ?
     let newCover = existing.cover;
-    if (req.file) {
-      deleteImageFromUploads(existing.cover);
-      try {
-        newCover = await processAndSaveImage(req.file.buffer);
-      } catch {
-        return res.status(400).json({ message: 'Cover invalide' });
+    if (typeof cover === 'string' && cover.startsWith('http')) {
+      if (existing.cover && existing.cover !== cover) {
+        await deleteImageFromCloudinary(existing.cover);
       }
+      newCover = cover;
     }
 
     const updated = await Gallery.findByIdAndUpdate(
@@ -219,23 +264,27 @@ router.put('/:id', auth, upload.single('cover'), async (req, res) => {
 
     res.json(updated);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 });
 
 /* ------------------------------------------------------------------ */
-/*  DELETE /:id (protégé)                                              */
+/*  DELETE /:id (protégé)                                             */
 /* ------------------------------------------------------------------ */
 router.delete('/:id', auth, async (req, res) => {
   try {
     const deleted = await Gallery.findByIdAndDelete(req.params.id);
     if (!deleted) return res.status(404).json({ message: 'Galerie non trouvée' });
 
-    deleteImageFromUploads(deleted.cover);
-    (deleted.pictures || []).forEach(deleteImageFromUploads);
+    await deleteImageFromCloudinary(deleted.cover);
+    for (const img of deleted.pictures || []) {
+      await deleteImageFromCloudinary(img);
+    }
 
     res.json({ message: 'Galerie supprimée avec succès' });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Erreur serveur lors de la suppression' });
   }
 });

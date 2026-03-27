@@ -52,6 +52,13 @@ export default function AdminPanel() {
     setPendingCover(null);
     setPendingImages([]);
     setIsNew(true);
+
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth',
+      });
+    }, 100);
   };
 
   const handleCoverSelection = (e) => {
