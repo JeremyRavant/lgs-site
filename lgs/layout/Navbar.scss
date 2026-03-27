@@ -1,0 +1,107 @@
+$bg: #3A5371;
+$accent: #CA9417;
+$bp: 900px; // breakpoint mobile
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: $bg;
+  color: $accent;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+
+  .navbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .logo img {
+    height: 56px;
+    width: auto;
+    display: block;
+  }
+
+  /* Bouton hamburger (caché en desktop) */
+  .hamburger {
+    display: none;
+    border: 0;
+    background: transparent;
+    color: $accent;
+    cursor: pointer;
+    padding: .25rem;
+    line-height: 0;
+
+    .icon { transition: opacity .2s ease; }
+    .icon-close { opacity: 0; }
+  }
+
+  /* Menu desktop */
+  .menu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    font-size: 1rem;
+
+    a {
+      text-decoration: none;
+      color: inherit;
+
+      &:hover,
+      &.active {
+        color: white;
+      }
+    }
+
+    .social img {
+      width: 36px;
+      height: 36px;
+      display: block;
+    }
+  }
+
+  /* ----------- Mobile ----------- */
+  @media (max-width: $bp) {
+    .hamburger { display: inline-flex; }
+
+    /* Menu mobile caché par défaut */
+    .menu {
+      position: absolute;
+      inset: 72px 0 auto 0;      // sous la barre
+      display: flex;
+      flex-direction: column;
+      background: $bg;
+      padding: 1rem 1.25rem 1.5rem;
+      gap: 1rem;
+      border-top: 1px solid rgba(255,255,255,.08);
+
+      /* animation slide-down */
+      transform: translateY(-12px);
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: transform .2s ease, opacity .2s ease, visibility 0s .2s;
+
+      a { font-size: 1.05rem; }
+      .social img { width: 28px; height: 28px; }
+    }
+
+    /* État ouvert */
+    &.is-open {
+      .menu {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+        visibility: visible;
+        transition: transform .2s ease, opacity .2s ease;
+      }
+      .hamburger {
+        .icon-burger { opacity: 0; }
+        .icon-close { opacity: 1; }
+      }
+    }
+  }
+}

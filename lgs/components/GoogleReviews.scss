@@ -1,0 +1,49 @@
+.g-reviews {
+  background:#fff; border-radius:1rem; padding:1.25rem; box-shadow:0 10px 25px rgba(0,0,0,.06);
+  margin-bottom: 2rem;
+  &__head { display:flex; align-items:center; justify-content:space-between; margin-bottom:.75rem; }
+  &__score { display:flex; align-items:center; gap:.5rem; }
+  &__list { display:grid; gap:1rem; }
+  &__item { border:1px solid rgba(0,0,0,.08); border-radius:.75rem; padding:1rem; }
+  &__author { display:flex; align-items:center; gap:.75rem; margin-bottom:.25rem;
+    img { width:36px; height:36px; border-radius:50%; object-fit:cover; }
+    strong { display:block; } small { color:#666; }
+  }
+  .stars .star { font-size:1rem; opacity:.35; }
+  .stars .star.full { opacity:1; }
+  .stars .star.half { opacity:.7; }
+  &__text { margin:.5rem 0 0; white-space:pre-wrap; }
+  &__foot { margin-top:.75rem; display:flex; gap:1rem; justify-content:flex-end; }
+}
+
+/* Couleur des étoiles */
+.stars {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.stars .star {
+  font-size: 1.1rem;
+  line-height: 1;
+  color: #f5c518;
+}
+
+/* Étoiles vides en gris clair */
+.stars .star.empty {
+  color: #d6d6d6;
+}
+
+/* Vraie demi-étoile : base grise + overlay jaune à 50% */
+.stars .star.half {
+  position: relative;
+  color: #d6d6d6;          /* fond gris */
+}
+.stars .star.half::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  overflow: hidden;
+  color: #f5c518;          /* jaune */
+}

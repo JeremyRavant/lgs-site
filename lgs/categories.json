@@ -1,0 +1,35 @@
+[
+	{
+		"id": "c67ab8a7",
+		"title": "Escaliers",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"description": "Fabrication et pose d’escaliers sur mesure. Etude et conseil personnalisé en fonction de vos agencements et de vos envies. Respect des normes. Personnalisable à 100% Escalier unique, design et intemporel. Structure en métal. Habillage en bois, en verre, ou tout autre matériaux"
+
+	},
+    {
+		"id": "c67ab8a8",
+		"title": "Verrières",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"description": "Fabrication et pose de verrière d’intérieur, ou verrière d’extérieur. La verrière en acier type verrière atelier est très tendance actuellement, elle permet d’apporter de la lumière, de délimiter un espace, que ce soit dans un salon, une suite parentale, ou dans une cuisine, elle sait s’intégrer dans tout style d’habitat. Nous réalisons toutes nos verrières sur mesure, en fonction de vos envies."
+
+	},
+    {
+		"id": "c67ab8a9",
+		"title": "Garde-corps",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"description": "Fabrication et pose de garde-corps fait sur mesure Les garde-corps ont aujourd’hui non seulement un rôle important de sécurité, mais ce sont également des pièces maitresses de votre décoration intérieur, ou extérieur. Nous vous proposons des garde-corps pour vos escaliers, vos terrasses, mezzanine etc Pour les rendre unique, nous pouvons mixer les matières, y ajouter des tôles oxycoupées, etc Ils sont personnalisables à souhaits !"
+
+	},
+    {
+		"id": "c67ab8a2",
+		"title": "Portails",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"description": "Fabrication et pose de portail fait sur mesure Qu’il soit classique, design, moderne, ou contemporain, nous saurons répondre à toutes vos exigences Personnalisable à 100%"
+	},
+	{
+		"id": "c67ab8a3",
+		"title": "Divers",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"description": "Créativité, précision et savoir-faire se conjuguent pour donner vie à des objets uniques en métal, quels que soient leur usage ou leur style. Mobilier, décoration, structures sur mesure… chaque pièce est conçue avec exigence et passion."
+	}
+]

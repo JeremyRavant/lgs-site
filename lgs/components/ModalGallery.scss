@@ -1,0 +1,88 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  width: min(96dvw, 1600px);  
+  height: min(92dvh, 1000px); 
+  padding: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.image-viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.modal-content .image-viewport > img.modal-image {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain !important;   
+  object-position: center center;
+  display: block;
+  user-select: none;
+}
+
+/* Bouton fermer */
+.modal-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 24px;
+  background: transparent;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  line-height: 1;
+  z-index: 1010;
+}
+
+/* Flèches navigation */
+.modal-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 0;
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  cursor: pointer;
+  z-index: 1010;
+
+  &.left { left: 12px; }
+  &.right { right: 12px; }
+}
+
+/* Responsive petit écran */
+@media (max-width: 600px) {
+  .modal-content {
+    width: 96dvw;
+    height: 80dvh;
+    padding: 0;
+  }
+
+  .modal-arrow {
+    width: 38px;
+    height: 38px;
+    font-size: 24px;
+  }
+}
