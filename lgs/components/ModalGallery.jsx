@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './ModalGallery.scss';
-import { apiUrl } from '../utils/api';
+import { apiUrl } from '../src/utils/api';
 
 function ModalGallery({ pictures = [], onClose }) {
   const [current, setCurrent] = useState(0);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ModalGallery from './ModalGallery';
 import './PictureCard.scss';
-import { apiUrl } from '../utils/api';
+import { apiUrl } from '../src/utils/api';
 
 function PictureCard({ cover, pictures = [] }) {
   const [open, setOpen] = useState(false);
