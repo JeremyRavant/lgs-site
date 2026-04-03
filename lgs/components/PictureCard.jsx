@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ModalGallery from './ModalGallery';
 import './PictureCard.scss';
-import { apiUrl } from '../pages/utils/api';
+import { apiUrl } from '../utils/api';
 
 function PictureCard({ cover, pictures = [] }) {
   const [open, setOpen] = useState(false);
@@ -9,12 +9,10 @@ function PictureCard({ cover, pictures = [] }) {
   const getImageUrl = (path) => {
     if (!path) return '';
 
-    // Image Cloudinary ou URL absolue
     if (path.startsWith('http://') || path.startsWith('https://')) {
       return path;
     }
 
-    // Ancien format local /uploads/...
     if (path.startsWith('/uploads')) {
       return apiUrl(path);
     }
