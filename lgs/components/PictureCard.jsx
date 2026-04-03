@@ -1,30 +1,35 @@
 import React, { useState } from 'react';
 import ModalGallery from './ModalGallery';
 import './PictureCard.scss';
+import { apiUrl } from '../pages/utils/api';
 
 function PictureCard({ cover, pictures = [] }) {
   const [open, setOpen] = useState(false);
 
-  // Filtrage des images valides
-  const validPictures = pictures.filter(
-    (url) => url && (url.startsWith('/uploads') || url.startsWith('http'))
-  );
-
   const getImageUrl = (path) => {
     if (!path) return '';
-    if (path.startsWith('http') || path.startsWith('/uploads')) {
-      return `http://localhost:5000${path}`.replace('http://localhost:5000http', 'http');
+
+    // Image Cloudinary ou URL absolue
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
     }
+
+    // Ancien format local /uploads/...
+    if (path.startsWith('/uploads')) {
+      return apiUrl(path);
+    }
+
     return '';
   };
 
-  const displayCover = cover && (cover.startsWith('/uploads') || cover.startsWith('http'));
+  const validPictures = pictures.filter((url) => getImageUrl(url));
+  const coverUrl = getImageUrl(cover);
 
   return (
     <>
       <div className="picture-card" onClick={() => setOpen(true)}>
-        {displayCover ? (
-          <img src={getImageUrl(cover)} alt="Photo galerie" />
+        {coverUrl ? (
+          <img src={coverUrl} alt="Photo galerie" />
         ) : (
           <div className="placeholder">Aucune image</div>
         )}
@@ -32,7 +37,10 @@ function PictureCard({ cover, pictures = [] }) {
       </div>
 
       {open && validPictures.length > 0 && (
-        <ModalGallery pictures={validPictures} onClose={() => setOpen(false)} />
+        <ModalGallery
+          pictures={validPictures.map((url) => getImageUrl(url))}
+          onClose={() => setOpen(false)}
+        />
       )}
     </>
   );
