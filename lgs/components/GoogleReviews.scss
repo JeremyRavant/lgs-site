@@ -1,22 +1,106 @@
 .g-reviews {
-  background:#fff; border-radius:1rem; padding:1.25rem; box-shadow:0 10px 25px rgba(0,0,0,.06);
-  margin-bottom: 2rem;
-  &__head { display:flex; align-items:center; justify-content:space-between; margin-bottom:.75rem; }
-  &__score { display:flex; align-items:center; gap:.5rem; }
-  &__list { display:grid; gap:1rem; }
-  &__item { border:1px solid rgba(0,0,0,.08); border-radius:.75rem; padding:1rem; }
-  &__author { display:flex; align-items:center; gap:.75rem; margin-bottom:.25rem;
-    img { width:36px; height:36px; border-radius:50%; object-fit:cover; }
-    strong { display:block; } small { color:#666; }
+  background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.7));
+  border: 1px solid rgba(58, 83, 113, 0.08);
+  border-radius: 2rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  box-shadow: 0 18px 40px rgba(26, 38, 52, 0.08);
+  margin: 2.5rem 0 2rem;
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    color: #3A5371;
   }
-  .stars .star { font-size:1rem; opacity:.35; }
-  .stars .star.full { opacity:1; }
-  .stars .star.half { opacity:.7; }
-  &__text { margin:.5rem 0 0; white-space:pre-wrap; }
-  &__foot { margin-top:.75rem; display:flex; gap:1rem; justify-content:flex-end; }
+
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__score {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    background: rgba(202, 148, 23, 0.1);
+    color: #3A5371;
+    border-radius: 999px;
+    padding: 0.65rem 0.9rem;
+    font-weight: 700;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+    margin: 0;
+  }
+
+  &__item {
+    border: 1px solid rgba(58, 83, 113, 0.08);
+    background: #fff;
+    border-radius: 1.2rem;
+    padding: 1rem;
+    box-shadow: 0 10px 24px rgba(26, 38, 52, 0.05);
+  }
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+
+    img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    strong {
+      display: block;
+      color: #3A5371;
+    }
+
+    small {
+      color: #666;
+    }
+
+    a {
+      overflow-wrap: anywhere;
+      color: inherit;
+    }
+  }
+
+  &__text {
+    margin: 0.75rem 0 0;
+    white-space: pre-wrap;
+    line-height: 1.7;
+    color: #294059;
+  }
+
+  > a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.25rem;
+    border-radius: 999px;
+    background: #3A5371;
+    color: white;
+    text-decoration: none;
+    padding: 0.9rem 1.3rem;
+    font-weight: 700;
+    box-shadow: 0 10px 24px rgba(58, 83, 113, 0.18);
+  }
 }
 
-/* Couleur des étoiles */
 .stars {
   display: inline-flex;
   gap: 2px;
@@ -28,16 +112,15 @@
   color: #f5c518;
 }
 
-/* Étoiles vides en gris clair */
 .stars .star.empty {
   color: #d6d6d6;
 }
 
-/* Vraie demi-étoile : base grise + overlay jaune à 50% */
 .stars .star.half {
   position: relative;
-  color: #d6d6d6;          /* fond gris */
+  color: #d6d6d6;
 }
+
 .stars .star.half::before {
   content: '★';
   position: absolute;
@@ -45,5 +128,17 @@
   top: 0;
   width: 50%;
   overflow: hidden;
-  color: #f5c518;          /* jaune */
+  color: #f5c518;
+}
+
+@media (max-width: 960px) {
+  .g-reviews__list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .g-reviews__list {
+    grid-template-columns: 1fr;
+  }
 }

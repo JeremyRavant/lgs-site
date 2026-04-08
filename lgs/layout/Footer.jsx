@@ -4,22 +4,25 @@ import './Footer.scss'
 function Footer() {
   return (
     <footer id="about">
-      <div className='logo'>
+      <div className='footer-card logo'>
         <img src="/LogoLGS.png" alt="Logo LGS" />
+        <p>Créations métalliques sur mesure pensées pour durer.</p>
       </div>
-      <div>
+      <div className='footer-card'>
+        <span className='footer-label'>Coordonnées</span>
         <p>16, route de la forêt 76113 SAHURS</p>
         <p>Tél. 06 10 52 01 78</p>
       </div>
-      <div>
-        <p>LGS Métallerie : Réalisation et pose : Escaliers, garde-corps, verrières intérieures et extérieures, portails et portillons, balustrades</p>
+      <div className='footer-card'>
+        <span className='footer-label'>Prestations</span>
+        <p>LGS Métallerie : réalisation et pose d’escaliers, garde-corps, verrières intérieures et extérieures, portails, portillons et balustrades.</p>
       </div>
-      <div>
-        <p>Métallerie située à Sahurs, près de Rouen en Seine-Maritime au cœur de la Normandie</p>
+      <div className='footer-card'>
+        <span className='footer-label'>Zone d’intervention</span>
+        <p>Métallerie située à Sahurs, près de Rouen en Seine-Maritime, au cœur de la Normandie.</p>
       </div>
     </footer>
   );
 }
-
 
 export default Footer

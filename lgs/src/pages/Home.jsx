@@ -16,7 +16,6 @@ function Home() {
       .then((response) => {
         const data = Array.isArray(response.data) ? response.data : [];
 
-        // on remplace "cover" par l'image random (si dispo)
         const merged = data.map((item) => ({
           ...item,
           cover: item.randomImageUrl
@@ -33,13 +32,22 @@ function Home() {
 
   return (
     <div className="banner-wrapper">
-      <div className='home__picture'>
-        <img src="cover.jpg" alt="image de couverture" />
-      </div>
+      <section className="hero-panel">
+        <div className='home__picture'>
+          <img src="cover.jpg" alt="image de couverture" />
+        </div>
 
-      <div className="description">
+        <div className="hero-badge-row">
+          <span>Fabrication sur mesure</span>
+          <span>Pose soignée</span>
+          <span>Rouen & agglomération</span>
+        </div>
+      </section>
+
+      <section className="description">
         <div className='description__content'>
           <div className='first__description'>
+            <p className="eyebrow">LGS Métallerie</p>
             <h1>Métallerie à Rouen</h1>
             <p>
               Notre savoir-faire, allié à notre expérience, nous pousse toujours à dépasser les attentes de nos clients en
@@ -47,9 +55,15 @@ function Home() {
               nous sommes spécialisés dans la métallerie, la serrurerie et plus particulièrement la métallerie d’art, afin de
               transformer vos idées en pièces d’exception.
             </p>
+
+            <div className="hero-actions">
+              <Link to="/contact" className="btn btn--primary">Demander un devis</Link>
+              <a href="#realisations" className="btn btn--secondary">Voir nos réalisations</a>
+            </div>
           </div>
 
           <div className="second__description">
+            <p className="mini-title">Nos savoir-faire</p>
             <h2>Nous réalisons pour vous la fabrication et la pose :</h2>
             <ul>
               <li>d'escaliers</li>
@@ -67,7 +81,12 @@ function Home() {
         <div className="picture-block">
           <img src="/description.jpg" alt="image de description" />
         </div>
-      </div>
+      </section>
+
+      <section className="section-heading" id="realisations">
+        <p>Nos créations</p>
+        <h2>Des réalisations pensées pour durer</h2>
+      </section>
 
       <div>
         {categories.map((item, index) => (
