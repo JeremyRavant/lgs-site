@@ -13,7 +13,9 @@ export default function Mentions() {
           SIREN : 908 349 681<br />
           SIRET : 908 349 681 00019<br />
           RCS : Rouen 908 349 681<br />
-          TVA intracommunautaire : FR22908349681
+          TVA intracommunautaire : FR22908349681<br />
+          Téléphone : 06.10.52.01.78<br />
+          Email : contact@lgs-metallerie.com
         </p>
       </section>
 
