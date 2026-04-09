@@ -1,5 +1,6 @@
 import React from 'react'
 import './Footer.scss'
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -20,6 +21,14 @@ function Footer() {
       <div className='footer-card'>
         <span className='footer-label'>Zone d’intervention</span>
         <p>Métallerie située à Sahurs, près de Rouen en Seine-Maritime, au cœur de la Normandie.</p>
+      </div>
+      <div className="footer-bottom">
+        <p>
+          © {new Date().getFullYear()} LGS Métallerie — Tous droits réservés —{" "}
+          <Link to="/mentions" className="mentions-link">
+            Mentions légales
+          </Link>
+        </p>
       </div>
     </footer>
   );

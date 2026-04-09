@@ -38,6 +38,39 @@ footer {
     width: min(100%, 220px);
     height: auto;
   }
+
+  .footer-bottom {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    p {
+      width: 100%;
+      margin: 0;
+      font-size: 0.85rem;
+      color: #d8dee6;
+    }
+
+    .mentions-link {
+      color: #f2d189;
+      text-decoration: none;
+      margin-left: 5px;
+      opacity: 0.8;
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: #ffffff;
+        opacity: 1;
+        text-decoration: underline;
+      }
+    }
+  }
 }
 
 @media (max-width: 1024px) {
@@ -49,5 +82,14 @@ footer {
 @media (max-width: 640px) {
   footer {
     grid-template-columns: 1fr;
+
+    .footer-bottom {
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+
+      p {
+        font-size: 0.8rem;
+      }
+    }
   }
 }

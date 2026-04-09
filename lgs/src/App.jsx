@@ -10,6 +10,7 @@ import Contact from './pages/Contact.jsx';
 import Admin from './pages/Admin.jsx';
 import Login from './pages/Login.jsx';        // <-- AJOUT
 import RequireAuth from './pages/RequireAuth.jsx';
+import Mentions from "./pages/Mentions";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/galerie/:title" element={<Galerie />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/mentions" element={<Mentions />} />
 
           {/* page de login (publique) */}
           <Route path="/login" element={<Login />} />   {/* <-- AJOUT */}
