@@ -3,7 +3,7 @@ import ModalGallery from './ModalGallery';
 import './PictureCard.scss';
 import { apiUrl } from '../src/utils/api';
 
-function PictureCard({ cover, pictures = [] }) {
+function PictureCard({ cover, pictures = [], categoryTitle = 'Métallerie' }) {
   const [open, setOpen] = useState(false);
 
   const getImageUrl = (path) => {
@@ -27,7 +27,7 @@ function PictureCard({ cover, pictures = [] }) {
     <>
       <div className="picture-card" onClick={() => setOpen(true)}>
         {coverUrl ? (
-          <img src={coverUrl} alt="Photo galerie" />
+          <img src={coverUrl} alt={`${categoryTitle} sur mesure signé LGS Métallerie`} loading="lazy" />
         ) : (
           <div className="placeholder">Aucune image</div>
         )}

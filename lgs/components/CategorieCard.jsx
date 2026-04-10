@@ -7,7 +7,7 @@ function CategorieCard({ title, description, cover, index }) {
   
     return (
       <div id="realisations" className={`card ${isEven ? 'card__left' : 'card__right'}`}>
-        <img src={getImageUrl(cover)} alt={title} />
+        <img src={getImageUrl(cover)} alt={`${title} sur mesure réalisé par LGS Métallerie`} loading="lazy" />
         <div className="categorie__title">
           <h2>{title}</h2>
           <p>{description}</p>

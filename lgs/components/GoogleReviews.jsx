@@ -36,7 +36,7 @@ export default function GoogleReviews() {
   return (
     <section className="g-reviews">
       <header className="g-reviews__head">
-        <h2>Avis Google</h2>
+        <h2>Avis Google sur notre métallerie à Sahurs</h2>
         <div className="g-reviews__score">
           <Stars value={data.rating} />
           <span>{data.rating} / 5 • {data.total} avis</span>
