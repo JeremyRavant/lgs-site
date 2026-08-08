@@ -1,14 +1,12 @@
-$bg: #3A5371;
-$accent: #CA9417;
 $bp: 900px;
 
 .navbar {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(58, 83, 113, 0.92);
-  color: $accent;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(145deg,  #617894,  #24374b);
+  color: var(--accent-copper);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
@@ -23,28 +21,44 @@ $bp: 900px;
     position: relative;
   }
 
-  .logo {
-    flex-shrink: 0;
+.logo {
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 10px;
+    padding: 10px 16px;
 
-    img {
-      height: clamp(42px, 5vw, 56px);
-      width: auto;
-      display: block;
-    }
-  }
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.15),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+.logo img {
+    display: block;
+    width: 120px;
+    height: auto;
+}
+
+.logo:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 9px 24px rgba(0, 0, 0, 0.22),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
 
   .hamburger {
     display: none;
     border: 0;
     background: transparent;
-    color: $accent;
+    color: var(--accent-copper);
     cursor: pointer;
     padding: 0.25rem;
     line-height: 0;
     flex-shrink: 0;
 
     .icon {
-      transition: opacity 0.2s ease;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
     .icon-close {
@@ -65,16 +79,18 @@ $bp: 900px;
 
     a {
       text-decoration: none;
-      color: inherit;
-      transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+      color: var(--text-light);
+      transition: color 0.25s ease, background 0.25s ease, transform 0.25s ease,
+        box-shadow 0.25s ease;
       padding: 0.72rem 1rem;
       border-radius: 999px;
       font-weight: 600;
 
       &:hover,
       &.active {
-        color: white;
-        background: rgba(255, 255, 255, 0.09);
+        color: var(--white);
+        background: rgba(154, 99, 54, 0.18);
+        box-shadow: 0 6px 18px rgba(154, 99, 54, 0.18);
         transform: translateY(-1px);
       }
     }
@@ -85,6 +101,13 @@ $bp: 900px;
       justify-content: center;
       padding: 0.5rem;
       background: rgba(255, 255, 255, 0.06);
+      border-radius: 999px;
+      transition: background 0.25s ease, transform 0.25s ease;
+
+      &:hover {
+        background: rgba(154, 99, 54, 0.18);
+        transform: translateY(-1px);
+      }
     }
 
     .social img {
@@ -98,8 +121,8 @@ $bp: 900px;
     .hamburger {
       display: inline-flex;
       position: relative;
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       align-items: center;
       justify-content: center;
       border-radius: 999px;
@@ -114,7 +137,7 @@ $bp: 900px;
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      background: rgba(43, 64, 88, 0.98);
+      background: rgba(36, 55, 75, 0.98);
       padding: 1rem;
       gap: 0.75rem;
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -129,6 +152,7 @@ $bp: 900px;
 
       a {
         font-size: 1rem;
+        text-align: center;
       }
 
       .social {

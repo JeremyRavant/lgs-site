@@ -1,8 +1,13 @@
 :root {
   color-scheme: light;
-  --bg: #f9e9d2;
-  --text: #3A5371;
-  --accent: #CA9417;
+  --primary-blue: #324962;
+  --secondary-blue: #24374b;
+  --accent-copper: #9a6336;
+  --accent-copper-light: #b37a4a;
+  --text-dark: #2b2b2b;
+  --text-light: #d8dee6;
+  --background-light: #f8f6f2;
+  --white: #ffffff;
   --max-content-width: 1200px;
   --page-gutter: clamp(1rem, 4vw, 2rem);
 }
@@ -20,8 +25,8 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--bg);
-  color: var(--text);
+  background: var(--background-light);
+  color: var(--text-dark);
   overflow-x: hidden;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

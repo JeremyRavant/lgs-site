@@ -52,7 +52,7 @@ a {
 }
 
 .card__left {
-  background: linear-gradient(135deg, #f2c35a 0%, #CA9417 100%);
+  background: linear-gradient(135deg, rgba(184, 121, 70, 0.774) 0%, rgb(148, 84, 32) 100%);
 
   .categorie__title {
     color: #213246;
@@ -65,7 +65,7 @@ a {
 }
 
 .card__right {
-  background: linear-gradient(145deg, #3A5371 0%, #27394d 100%);
+  background: linear-gradient(145deg,  #617894,  #24374b);
   grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
 
   img {

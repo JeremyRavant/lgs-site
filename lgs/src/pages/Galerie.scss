@@ -2,8 +2,8 @@
   width: 100%;
   min-height: 120px;
   font-size: clamp(2.2rem, 7vw, 5.5rem);
-  color: #3A5371;
-  background-color: #CA9417;
+  color: #213246;
+  background: linear-gradient(135deg, rgba(184, 121, 70, 0.774) 0%, rgb(148, 84, 32) 100%);
   border-radius: 2rem;
   display: grid;
   place-items: center;
@@ -19,8 +19,8 @@
   margin-inline: auto;
   padding: clamp(1rem, 3vw, 2rem);
   font-size: clamp(1rem, 2vw, 1.375rem);
-  color: #CA9417;
-  background-color: #3a5371;
+  color: #f6d899;
+  background: linear-gradient(145deg, #617894, #24374b);
   border-radius: 2rem;
   line-height: 1.7;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
