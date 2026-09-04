@@ -27,9 +27,16 @@
 		"description": "Fabrication et pose de portail fait sur mesure Qu’il soit classique, design, moderne, ou contemporain, nous saurons répondre à toutes vos exigences Personnalisable à 100%"
 	},
 	{
+		"id": "c67ab8a2",
+		"title": "Structures métalliques",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"description": "Fabrication et pose de portail fait sur mesure Qu’il soit classique, design, moderne, ou contemporain, nous saurons répondre à toutes vos exigences Personnalisable à 100%"
+	},
+	{
 		"id": "c67ab8a3",
 		"title": "Divers",
 		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
 		"description": "Créativité, précision et savoir-faire se conjuguent pour donner vie à des objets uniques en métal, quels que soient leur usage ou leur style. Mobilier, décoration, structures sur mesure… chaque pièce est conçue avec exigence et passion."
 	}
+
 ]

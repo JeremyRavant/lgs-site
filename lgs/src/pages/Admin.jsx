@@ -11,6 +11,11 @@ export default function AdminPanel() {
   const [isNew, setIsNew] = useState(false);
   const [pendingImages, setPendingImages] = useState([]);
   const [pendingCover, setPendingCover] = useState(null);
+  const [newCategoryTitle, setNewCategoryTitle] = useState('Structures métalliques');
+  const [newCategoryDescription, setNewCategoryDescription] = useState(
+    'Fabrication et pose de structures métalliques sur mesure pour particuliers et professionnels : ossatures, supports, châssis, structures extérieures et réalisations spécifiques.'
+  );
+  const [isCreatingCategory, setIsCreatingCategory] = useState(false);
 
   useEffect(() => {
     fetch(apiUrl('/api/categories'))
@@ -39,6 +44,44 @@ export default function AdminPanel() {
     } catch (e) {
       console.error(e);
       alert('Erreur lors de la suppression');
+    }
+  };
+
+  const handleCreateCategory = async (e) => {
+    e.preventDefault();
+
+    const title = newCategoryTitle.trim();
+    const description = newCategoryDescription.trim();
+
+    if (!title) {
+      alert('Indique un nom de catégorie');
+      return;
+    }
+
+    try {
+      setIsCreatingCategory(true);
+
+      const r = await authFetch(apiUrl('/api/categories'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description }),
+      });
+
+      const data = await r.json().catch(() => ({}));
+
+      if (!r.ok) {
+        alert(data.message || 'Erreur lors de la création de la catégorie');
+        return;
+      }
+
+      setCategories((prev) => [...prev, data]);
+      setSelectedCategory(data.title);
+      alert(`Catégorie « ${data.title} » créée !`);
+    } catch (e) {
+      console.error('CREATE category', e);
+      alert('Erreur lors de la création de la catégorie');
+    } finally {
+      setIsCreatingCategory(false);
     }
   };
 
@@ -159,6 +202,34 @@ export default function AdminPanel() {
   return (
     <div className="admin-panel">
       <h2>Panneau d’administration</h2>
+      <section className="category-create-panel">
+        <h3>Ajouter une catégorie</h3>
+        <p>La catégorie sera ensuite disponible lors de la création d’une galerie.</p>
+
+        <form onSubmit={handleCreateCategory}>
+          <label htmlFor="new-category-title">Nom de la catégorie</label>
+          <input
+            id="new-category-title"
+            type="text"
+            value={newCategoryTitle}
+            onChange={(e) => setNewCategoryTitle(e.target.value)}
+            placeholder="Ex. Structures métalliques"
+          />
+
+          <label htmlFor="new-category-description">Description</label>
+          <textarea
+            id="new-category-description"
+            value={newCategoryDescription}
+            onChange={(e) => setNewCategoryDescription(e.target.value)}
+            rows={4}
+          />
+
+          <button type="submit" className="btn-add-category" disabled={isCreatingCategory}>
+            {isCreatingCategory ? 'Création…' : '➕ Ajouter la catégorie'}
+          </button>
+        </form>
+      </section>
+
       <button onClick={handleNewGallery} className="btn-add-gallery">
         ➕ Créer une nouvelle galerie
       </button>

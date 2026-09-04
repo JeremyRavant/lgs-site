@@ -3,6 +3,7 @@ const router = express.Router();
 
 const Category = require('../models/Category');
 const Gallery = require('../models/Gallery');
+const auth = require('../middleware/auth');
 
 // ==========================
 // Cache en mémoire (par catégorie)
@@ -82,6 +83,44 @@ router.get('/with-random-image', async (req, res) => {
   } catch (error) {
     console.error('GET /api/categories/with-random-image error:', error);
     return res.status(500).json({ message: error.message });
+  }
+});
+
+
+// ======================================================
+// POST /api/categories (protégé)
+// Crée une nouvelle catégorie depuis le panneau admin
+// ======================================================
+router.post('/', auth, async (req, res) => {
+  try {
+    const title = typeof req.body?.title === 'string' ? req.body.title.trim() : '';
+    const description =
+      typeof req.body?.description === 'string' ? req.body.description.trim() : '';
+
+    if (!title) {
+      return res.status(400).json({ message: 'Le nom de la catégorie est requis' });
+    }
+
+    const escapedTitle = title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const existing = await Category.findOne({
+      title: { $regex: `^${escapedTitle}$`, $options: 'i' },
+    });
+
+    if (existing) {
+      return res.status(409).json({ message: 'Cette catégorie existe déjà' });
+    }
+
+    const category = await Category.create({
+      title,
+      description,
+      cover: '',
+    });
+
+    cacheByCategory.delete(title);
+    return res.status(201).json(category);
+  } catch (error) {
+    console.error('POST /api/categories error:', error);
+    return res.status(500).json({ message: 'Erreur lors de la création de la catégorie' });
   }
 });
 

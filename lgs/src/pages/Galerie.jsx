@@ -17,6 +17,8 @@ const descriptions = {
     'Découvrez nos portails métalliques sur mesure fabriqués en Normandie pour allier sécurité, style et durabilité.',
   divers:
     'Découvrez nos créations métalliques sur mesure : mobilier, décoration, structures personnalisées et réalisations uniques.',
+  'structures métalliques':
+    'Découvrez nos structures métalliques sur mesure réalisées à Sahurs près de Rouen : ossatures, châssis, supports et ouvrages métalliques robustes pour particuliers et professionnels.',
 };
 
 function Galerie() {
