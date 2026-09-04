@@ -130,8 +130,21 @@ function Home() {
       </section>
 
       <div>
-        {categories.map((item, index) => (
-          <Link to={`/galerie/${item.title}`} key={item._id || index} aria-label={`Découvrir la galerie ${item.title}`}>
+        {[...categories]
+          .sort((a, b) => {
+            const ordre = {
+              "Structures métalliques": 1,
+              "Divers": 2,
+        };
+
+        return (ordre[a.title] || 0) - (ordre[b.title] || 0);
+        })
+        .map((item, index) => (
+          <Link
+            to={`/galerie/${item.title}`}
+            key={item._id || index}
+            aria-label={`Découvrir la galerie ${item.title}`}
+          >
             <Categorie {...item} index={index} />
           </Link>
         ))}
