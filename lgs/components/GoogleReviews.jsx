@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
-import '../components/GoogleReviews.scss';
+import "../components/GoogleReviews.scss";
 import { apiUrl } from "../src/utils/api";
 
 function Stars({ value = 0 }) {
-  const full = Math.floor(value);
-  const half = value - full >= 0.5;
+  const safeValue = Number(value) || 0;
+  const full = Math.floor(safeValue);
+  const half = safeValue - full >= 0.5;
+
   return (
-    <div className="stars" aria-label={`${value} sur 5`}>
+    <div className="stars" aria-label={`${safeValue} sur 5`}>
       {Array.from({ length: 5 }).map((_, i) => {
-        const s = i < full ? "full" : i === full && half ? "half" : "empty";
-        return <span key={i} className={`star ${s}`} aria-hidden>★</span>;
+        const s =
+          i < full ? "full" : i === full && half ? "half" : "empty";
+
+        return (
+          <span key={i} className={`star ${s}`} aria-hidden>
+            ★
+          </span>
+        );
       })}
     </div>
   );
@@ -21,51 +29,111 @@ export default function GoogleReviews() {
 
   useEffect(() => {
     fetch(apiUrl("/api/google-reviews"))
-      .then(r => r.json())
-      .then(setData)
-      .catch(() => setErr("Impossible de charger les avis Google."));
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (!result || !Array.isArray(result.reviews)) {
+          throw new Error("Données Google Reviews invalides");
+        }
+
+        return result;
+      })
+      .then((result) => {
+        setData(result);
+      })
+      .catch((error) => {
+        console.error("Erreur Google Reviews :", error);
+        setErr("Impossible de charger les avis Google.");
+      });
   }, []);
 
-  if (err) return <p>{err}</p>;
-  if (!data) return <p>Chargement des avis…</p>;
+  /*
+   * Important :
+   * si Google Reviews ne fonctionne pas,
+   * on n'empêche jamais le reste du site de s'afficher.
+   */
+  if (err) {
+    return null;
+  }
 
-  const writeReviewUrl = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(
-    import.meta.env?.VITE_GOOGLE_PLACE_ID || ""
-  )}`;
+  if (!data) {
+    return null;
+  }
+
+  const reviews = Array.isArray(data.reviews)
+    ? data.reviews
+    : [];
 
   return (
     <section className="g-reviews">
       <header className="g-reviews__head">
         <h2>Avis Google sur notre métallerie à Sahurs</h2>
+
         <div className="g-reviews__score">
           <Stars value={data.rating} />
-          <span>{data.rating} / 5 • {data.total} avis</span>
+
+          <span>
+            {data.rating} / 5 • {data.total} avis
+          </span>
         </div>
       </header>
 
       <ul className="g-reviews__list">
-        {data.reviews.map((r, i) => (
+        {reviews.map((r, i) => (
           <li key={i} className="g-reviews__item">
             <div className="g-reviews__author">
-              {r.profile_photo_url && <img src={r.profile_photo_url} alt="" />}
+              {r?.profile_photo_url && (
+                <img
+                  src={r.profile_photo_url}
+                  alt=""
+                />
+              )}
+
               <div>
                 <strong>
-                  <a href={r.author_url} target="_blank" rel="noreferrer">
-                    {r.author_name}
-                  </a>
+                  {r?.author_url ? (
+                    <a
+                      href={r.author_url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {r?.author_name || "Client Google"}
+                    </a>
+                  ) : (
+                    r?.author_name || "Client Google"
+                  )}
                 </strong>
-                <small>{r.relative_time_description}</small>
+
+                <small>
+                  {r?.relative_time_description || ""}
+                </small>
               </div>
             </div>
-            <Stars value={r.rating} />
-            <p className="g-reviews__text">{r.text}</p>
+
+            <Stars value={r?.rating} />
+
+            {r?.text && (
+              <p className="g-reviews__text">
+                {r.text}
+              </p>
+            )}
           </li>
         ))}
       </ul>
 
-      <a href={data.url} target="_blank" rel="noreferrer">
-        Voir tous les avis sur Google
-      </a>
+      {data.url && (
+        <a
+          href={data.url}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Voir tous les avis sur Google
+        </a>
+      )}
     </section>
   );
 }
